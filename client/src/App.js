@@ -1,48 +1,56 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
+import React, { useEffect } from 'react';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Login from './Login';
+import Header from './Header';
+import HeaderMain from './HeaderMain';
+import FileUpload from './FileUpload';
+
+import {useStateValue} from './StateProvider'
+
+import {auth} from "./firebase";
+//import Axios from 'axios';
 
 export default function App() {
-  const imageStyle = {
-    width: '500px',
-    height: '500px',
-    objectFit: 'cover',
-    marginTop: '100px',
-  };
+   const [{}, dispatch] = useStateValue();
+  useEffect(() => {
+  //will only run once when the
+    auth.onAuthStateChanged(authUser =>{
+      //console.log('The User Is >>>>', authUser);
 
-  const [image, setImage] = useState('');
-  const [isUploaded, setIsUploaded] = useState('');
-  function uploadImage(e) {
-    e.preventDefault();
-    if (!image) {
-      console.log('No image Selected');
-      return;
-    }
-    let formData = new FormData();
-    formData.append('image', image);
-
-    Axios.post('/api/imageupload', formData).then((response) => {
-      e.target.image.value = null;
-      setImage('');
-      //setIsUploaded('/uploads/' + response.data.filename);
-      setIsUploaded(response.data.amazon.Location);
-      console.log(response.data);
-    });
-  }
-  function handleChange(e) {
-    setImage(e.target.files[0]);
-  }
-
+      if (authUser){
+        //the user is loged in
+        dispatch({
+          type:'SET_USER',
+          user:authUser
+          })
+          }else{
+            //the User is logged out
+            dispatch({
+              type:'SET_USER',
+              user:null
+              })
+              }
+            })  
+          }, []) 
+  
   return (
-    <div>
-      <form onSubmit={uploadImage}>
-        <input type="file" name="image" id="image" onChange={handleChange} />
-        <button>Upload</button>
-      </form>
-      {isUploaded ? (
-        <img src={isUploaded} style={imageStyle} alt="random image uploads" />
-      ) : (
-        <div style={imageStyle}> No images uploaded yet</div>
-      )}
+    <Router>
+    <div className='container mt-4'>
+      <Switch>
+        <Route path='/login'>
+          <Login />
+        </Route>
+
+        <Route path='/'>
+        <HeaderMain/>
+        <Header/>
+        <FileUpload />
+     
+      </Route>
+
+      </Switch>
     </div>
+   
+    </Router>
   );
 }

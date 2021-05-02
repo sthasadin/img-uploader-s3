@@ -1,0 +1,19 @@
+.file__upload {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid #abc4ff;
+}
+
+.fileUpload__form {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.fileUpload__imageHolder {
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
