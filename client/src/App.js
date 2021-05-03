@@ -1,35 +1,45 @@
 import React, { useEffect } from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Login from './Login';
-import Header from './Header';
-import HeaderMain from './HeaderMain';
+
 import FileUpload from './FileUpload';
-
 import {useStateValue} from './StateProvider'
-
 import {auth} from "./firebase";
+import firebase from './firebase'
 //import Axios from 'axios';
 
 export default function App() {
+  
    const [{}, dispatch] = useStateValue();
-  useEffect(() => {
-  //will only run once when the
-    auth.onAuthStateChanged(authUser =>{
-      //console.log('The User Is >>>>', authUser);
 
-      if (authUser){
-        //the user is loged in
+// async function handleLogout() {
+//   await Auth.signOut();
+//   userHasAuthenticated(false);
+//   history.push("/login");
+// }
+// if (!auth.currentUser){
+//   history.push('/login')
+// }
+
+
+
+  useEffect(() => {
+    auth.onAuthStateChanged(authUser =>{
+      if (authUser){ 
+
         dispatch({
           type:'SET_USER',
           user:authUser
           })
+
           }else{
-            //the User is logged out
             dispatch({
               type:'SET_USER',
               user:null
               })
               }
+             
             })  
           }, []) 
   
@@ -37,17 +47,10 @@ export default function App() {
     <Router>
     <div className='container mt-4'>
       <Switch>
-        <Route path='/login'>
-          <Login />
-        </Route>
-
-        <Route path='/'>
-        <HeaderMain/>
-        <Header/>
-        <FileUpload />
-     
-      </Route>
-
+        <Route exact path='/login' component={Login}/>
+        
+        <Route exact path='/' component={FileUpload}/>
+       
       </Switch>
     </div>
    

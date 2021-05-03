@@ -16,6 +16,7 @@ function Login() {
       })
       .catch((error) => alert(error.message));
   };
+
   const register = (e) => {
     e.preventDefault();
     auth
@@ -28,12 +29,13 @@ function Login() {
       .catch((error) => alert(error.message));
   };
 
+  
+
   return (
     <div className="login">
       <Link to='./' className='text-decoration-none text-center'>
       <h1 className="display-4 text-center mb-5 ">Cloud File</h1>
       </Link>
-      
       <div className="login__container">
           <h1>Sign In</h1>
           <form>
